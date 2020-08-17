@@ -4,8 +4,58 @@ on:
 name: generate executables
 
 jobs:
+  windows:
+    name: windows
+    runs-on: windows-latest
+    steps:
+      - name: repo
+        uses: actions/checkout@v2.3.1
+        with:
+          path: svl
+          fetch-depth: 0
+
+      - name: python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+
+      - name: git
+        run: |
+          git config --global user.email "apollo3-uploader-builder@sparkfun.com"
+          git config --global user.name "apollo3-uploader-builder"
+          git config --global pull.ff only
+          cd svl
+          git status
+          git pull
+          cd ${GITHUB_WORKSPACE}
+
+      - name: install
+        run: |
+          python --version
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r svl/requirements.txt
+
+      - name: build
+        run: |
+          pyinstaller --onefile svl/svl.py
+
+      - name: copy
+        run: |
+          Remove-Item -Recurse -Force svl\dist\windows
+          mkdir svl\dist\windows
+          Move-Item -Path dist\svl.exe -Destination svl\dist\windows\svl.exe
+
+      - name: commit
+        run: |
+          cd svl
+          git add dist\windows\*
+          git commit -m "generated windows executable"
+          git push
+          cd ${GITHUB_WORKSPACE}
+
   linux:
     name: linux
+    needs: windows
     runs-on: ubuntu-latest
     steps:
       - name: repo
@@ -21,10 +71,10 @@ jobs:
 
       - name: git
         run: |
-          cd svl
           git config --global user.email "apollo3-uploader-builder@sparkfun.com"
           git config --global user.name "apollo3-uploader-builder"
-          git config pull.ff only
+          git config --global pull.ff only
+          cd svl
           git pull
           cd ${GITHUB_WORKSPACE}
 
@@ -70,10 +120,10 @@ jobs:
 
       - name: git
         run: |
-          cd svl
           git config --global user.email "apollo3-uploader-builder@sparkfun.com"
           git config --global user.name "apollo3-uploader-builder"
-          git config pull.ff only
+          git config --global pull.ff only
+          cd svl
           git pull
           cd ${GITHUB_WORKSPACE}
 
@@ -100,52 +150,3 @@ jobs:
           git commit -m "generated macosx executable"
           git push
           cd ${GITHUB_WORKSPACE}
-
-  windows:
-    name: windows
-    needs: macosx
-    runs-on: windows-latest
-    steps:
-      - name: repo
-        uses: actions/checkout@v2.3.1
-        with:
-          path: svl
-          fetch-depth: 0
-
-      - name: python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.7'
-
-      - name: git
-        run: |
-          cd svl
-          git config --global user.email "apollo3-uploader-builder@sparkfun.com"
-          git config --global user.name "apollo3-uploader-builder"
-          git config pull.ff only
-          git pull
-          cd %GITHUB_WORKSPACE%
-
-      - name: install
-        run: |
-          python --version
-          python -m pip install --upgrade pip setuptools wheel
-          pip install -r svl/requirements.txt
-
-      - name: build
-        run: |
-          pyinstaller --onefile svl/svl.py
-
-      - name: copy
-        run: |
-          Remove-Item -Recurse -Force svl\dist\windows
-          mkdir svl\dist\windows
-          Move-Item -Path dist\svl.exe -Destination svl\dist\windows\svl.exe
-
-      - name: commit
-        run: |
-          cd svl
-          git add dist\windows\*
-          git commit -m "generated windows executable"
-          git push
-          cd %GITHUB_WORKSPACE%
