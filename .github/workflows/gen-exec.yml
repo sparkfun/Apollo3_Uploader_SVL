@@ -119,10 +119,12 @@ jobs:
 
       - name: git
         run: |
+          cd svl
           git config --global user.email "apollo3-uploader-builder@sparkfun.com"
           git config --global user.name "apollo3-uploader-builder"
           git config pull.ff only
           git pull
+          cd %GITHUB_WORKSPACE%
 
       - name: install
         run: |
@@ -146,4 +148,4 @@ jobs:
           git add dist\windows\*
           git commit -m "generated windows executable"
           git push
-          cd ${GITHUB_WORKSPACE}
+          cd %GITHUB_WORKSPACE%
