@@ -21,10 +21,10 @@ jobs:
 
       - name: git
         run: |
+          cd svl
           git config --global user.email "apollo3-uploader-builder@sparkfun.com"
           git config --global user.name "apollo3-uploader-builder"
           git config pull.ff only
-          cd svl
           git pull
           cd ${GITHUB_WORKSPACE}
 
@@ -70,10 +70,10 @@ jobs:
 
       - name: git
         run: |
+          cd svl
           git config --global user.email "apollo3-uploader-builder@sparkfun.com"
           git config --global user.name "apollo3-uploader-builder"
           git config pull.ff only
-          cd svl
           git pull
           cd ${GITHUB_WORKSPACE}
 
