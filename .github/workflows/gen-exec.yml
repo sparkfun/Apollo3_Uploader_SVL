@@ -4,106 +4,106 @@ on:
 name: generate executables
 
 jobs:
-  # linux:
-  #   name: linux
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: repo
-  #       uses: actions/checkout@v2.3.1
-  #       with:
-  #         path: svl
-  #         fetch-depth: 0
+  linux:
+    name: linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: repo
+        uses: actions/checkout@v2.3.1
+        with:
+          path: svl
+          fetch-depth: 0
 
-  #     - name: python
-  #       uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.7'
+      - name: python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
 
-  #     - name: git
-  #       run: |
-  #         cd svl
-  #         git config --global user.email "apollo3-uploader-builder@sparkfun.com"
-  #         git config --global user.name "apollo3-uploader-builder"
-  #         git config pull.ff only
-  #         git pull
-  #         cd ${GITHUB_WORKSPACE}
+      - name: git
+        run: |
+          git config --global user.email "apollo3-uploader-builder@sparkfun.com"
+          git config --global user.name "apollo3-uploader-builder"
+          git config pull.ff only
+          cd svl
+          git pull
+          cd ${GITHUB_WORKSPACE}
 
-  #     - name: install
-  #       run: |
-  #         python --version
-  #         python -m pip install --upgrade pip setuptools wheel
-  #         pip install -r svl/requirements.txt
+      - name: install
+        run: |
+          python --version
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r svl/requirements.txt
 
-  #     - name: build
-  #       run: |
-  #         pyinstaller --onefile svl/svl.py
+      - name: build
+        run: |
+          pyinstaller --onefile svl/svl.py
 
-  #     - name: copy
-  #       run: |
-  #         rm -rf ./svl/dist/linux
-  #         mkdir -p ./svl/dist/linux
-  #         mv ./dist/svl ./svl/dist/linux/svl
+      - name: copy
+        run: |
+          rm -rf ./svl/dist/linux
+          mkdir -p ./svl/dist/linux
+          mv ./dist/svl ./svl/dist/linux/svl
 
-  #     - name: commit
-  #       run: |
-  #         cd ./svl
-  #         git add ./dist/linux/*
-  #         git commit -m "generated linux executable"
-  #         git push
-  #         cd ${GITHUB_WORKSPACE}
+      - name: commit
+        run: |
+          cd ./svl
+          git add ./dist/linux/*
+          git commit -m "generated linux executable"
+          git push
+          cd ${GITHUB_WORKSPACE}
 
-  # macosx:
-  #   name: macosx
-  #   needs: linux
-  #   runs-on: macos-latest
-  #   steps:
-  #     - name: repo
-  #       uses: actions/checkout@v2.3.1
-  #       with:
-  #         path: svl
-  #         fetch-depth: 0
+  macosx:
+    name: macosx
+    needs: linux
+    runs-on: macos-latest
+    steps:
+      - name: repo
+        uses: actions/checkout@v2.3.1
+        with:
+          path: svl
+          fetch-depth: 0
 
-  #     - name: python
-  #       uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.7'
+      - name: python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
 
-  #     - name: git
-  #       run: |
-  #         cd svl
-  #         git config --global user.email "apollo3-uploader-builder@sparkfun.com"
-  #         git config --global user.name "apollo3-uploader-builder"
-  #         git config pull.ff only
-  #         git pull
-  #         cd ${GITHUB_WORKSPACE}
+      - name: git
+        run: |
+          git config --global user.email "apollo3-uploader-builder@sparkfun.com"
+          git config --global user.name "apollo3-uploader-builder"
+          git config pull.ff only
+          cd svl
+          git pull
+          cd ${GITHUB_WORKSPACE}
 
-  #     - name: install
-  #       run: |
-  #         python --version
-  #         python -m pip install --upgrade pip setuptools wheel
-  #         pip install -r svl/requirements.txt
+      - name: install
+        run: |
+          python --version
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r svl/requirements.txt
 
-  #     - name: build
-  #       run: |
-  #         pyinstaller --onefile svl/svl.py
+      - name: build
+        run: |
+          pyinstaller --onefile svl/svl.py
 
-  #     - name: copy
-  #       run: |
-  #         rm -rf ./svl/dist/macosx
-  #         mkdir -p ./svl/dist/macosx
-  #         mv ./dist/svl ./svl/dist/macosx/svl
+      - name: copy
+        run: |
+          rm -rf ./svl/dist/macosx
+          mkdir -p ./svl/dist/macosx
+          mv ./dist/svl ./svl/dist/macosx/svl
 
-  #     - name: commit
-  #       run: |
-  #         cd ./svl
-  #         git add ./dist/macosx/*
-  #         git commit -m "generated macosx executable"
-  #         git push
-  #         cd ${GITHUB_WORKSPACE}
+      - name: commit
+        run: |
+          cd ./svl
+          git add ./dist/macosx/*
+          git commit -m "generated macosx executable"
+          git push
+          cd ${GITHUB_WORKSPACE}
 
   windows:
     name: windows
-    # needs: macosx
+    needs: macosx
     runs-on: windows-latest
     steps:
       - name: repo
@@ -119,7 +119,6 @@ jobs:
 
       - name: git
         run: |
-          Get-ChildItem
           cd svl
           git config --global user.email "apollo3-uploader-builder@sparkfun.com"
           git config --global user.name "apollo3-uploader-builder"
