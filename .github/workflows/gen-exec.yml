@@ -119,13 +119,10 @@ jobs:
 
       - name: git
         run: |
-          Get-ChildItem
-          cd svl
           git config --global user.email "apollo3-uploader-builder@sparkfun.com"
           git config --global user.name "apollo3-uploader-builder"
           git config pull.ff only
           git pull
-          cd ${GITHUB_WORKSPACE}
 
       - name: install
         run: |
