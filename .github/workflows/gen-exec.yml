@@ -103,7 +103,7 @@ jobs:
 
   windows:
     name: windows
-    # needs: macosx
+    needs: macosx
     runs-on: windows-latest
     steps:
       - name: repo
