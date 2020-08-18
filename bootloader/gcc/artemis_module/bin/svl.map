@@ -852,7 +852,7 @@ START GROUP
 LOAD /Users/owenlyke/gnu/arm/gcc-arm-none-eabi-9-2019-q4-major/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/libgcc.a
 LOAD /Users/owenlyke/gnu/arm/gcc-arm-none-eabi-9-2019-q4-major/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a
 END GROUP
-OUTPUT(../gcc/artemis_module/bin/artemis_svl_asb.axf elf32-littlearm)
+OUTPUT(../gcc/artemis_module/bin/svl.axf elf32-littlearm)
 
 .debug_info     0x0000000000000000     0xe4bc
  .debug_info    0x0000000000000000     0x6314 ../gcc/artemis_module/bin/main.o

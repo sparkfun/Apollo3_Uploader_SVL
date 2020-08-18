@@ -96,7 +96,7 @@ PROJECTPATH		?=# Set as the path to the project if not located at ..
 BOARD			?=# If using a SparkFun board you can simply provide the name e.g. redboard_artemis_atp
 
 ### Project Settings
-TARGET := artemis_svl
+TARGET := svl
 COMPILERNAME := gcc
 PROJECT := $(TARGET)_gcc
 
@@ -339,8 +339,7 @@ ODFLAGS = -S
 #
 #******************************************************************************
 all: asb
-asb: directories $(CONFIG)/$(TARGET)_asb.bin
-svl: directories $(CONFIG)/$(TARGET)_svl.bin
+asb: directories $(CONFIG)/$(TARGET).bin
 
 directories:
 	@mkdir -p $(CONFIG)
@@ -361,23 +360,18 @@ $(CONFIG)/%.o: %.s $(CONFIG)/%.d
 	@echo " Assembling $(COMPILERNAME) $<" ;\
 	$(CC) -c $(CFLAGS) $< -o $@
 
-$(CONFIG)/$(TARGET)_asb.axf: LINKER_FILE = $(COMMONPATH)/tools_sfe/templates/asb_linker.ld
-$(CONFIG)/$(TARGET)_asb.axf: $(OBJS) $(LIBS)
+$(CONFIG)/$(TARGET).axf: LINKER_FILE = $(COMMONPATH)/tools_sfe/templates/asb_linker.ld
+$(CONFIG)/$(TARGET).axf: $(OBJS) $(LIBS)
 	@echo " Linking $(COMPILERNAME) $@ with script $(LINKER_FILE)";\
 	$(CC) -Wl,-T,$(LINKER_FILE) -o $@ $(OBJS) $(LFLAGS)
 
-$(CONFIG)/$(TARGET)_svl.axf: LINKER_FILE = $(COMMONPATH)/tools_sfe/templates/asb_svl_linker.ld
-$(CONFIG)/$(TARGET)_svl.axf: $(OBJS) $(LIBS)
-	@echo " Linking $(COMPILERNAME) $@ with script $(LINKER_FILE)";\
-	$(CC) -Wl,-T,$(LINKER_FILE) -o $@ $(OBJS) $(LFLAGS)
-
-$(CONFIG)/$(TARGET)_%.bin: $(CONFIG)/$(TARGET)_%.axf
+$(CONFIG)/$(TARGET).bin: $(CONFIG)/$(TARGET).axf
 	@echo " Copying $(COMPILERNAME) $@..." ;\
 	$(CP) $(CPFLAGS) $< $@ ;\
 	$(OD) $(ODFLAGS) $< > $(CONFIG)/$(TARGET).lst
 
-bootload_asb: directories $(CONFIG)/$(TARGET)_asb.bin
-	$(AMBIQ_BIN2BOARD) --bin $(CONFIG)/$(TARGET)_asb.bin --load-address-blob 0x20000 --magic-num 0xCB -o $(CONFIG)/$(TARGET) --version 0x0 --load-address-wired 0xC000 -i 6 --options 0x1 -b $(ASB_UPLOAD_BAUD) -port $(COM_PORT) -r 2 -v 
+bootload_asb: directories $(CONFIG)/$(TARGET).bin
+	$(AMBIQ_BIN2BOARD) --bin $(CONFIG)/$(TARGET).bin --load-address-blob 0x20000 --magic-num 0xCB -o $(CONFIG)/$(TARGET) --version 0x0 --load-address-wired 0xC000 -i 6 --options 0x1 -b $(ASB_UPLOAD_BAUD) -port $(COM_PORT) -r 2 -v 
 
 bootload_svl: directories $(CONFIG)/$(TARGET)_svl.bin
 	$(ARTEMIS_SVL) $(COM_PORT) -f $(CONFIG)/$(TARGET)_svl.bin -b $(SVL_UPLOAD_BAUD) -v

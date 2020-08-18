@@ -1,5 +1,5 @@
 
-../gcc/artemis_module/bin/artemis_svl_asb.axf:     file format elf32-littlearm
+../gcc/artemis_module/bin/svl.axf:     file format elf32-littlearm
 
 
 Disassembly of section .text:
