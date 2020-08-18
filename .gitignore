@@ -1,6 +1,10 @@
 # macosx
 .DS_Store
 
+# gcc build artifacts
+*.o
+*.d
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
