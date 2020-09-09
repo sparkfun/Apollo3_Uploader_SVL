@@ -22,7 +22,9 @@ Artemis SVL Versions:
   * Python is installed on your computer
   * your program is compiled + linked to support the SVL (binary offset ```0x10000```)
 * use the SVL loader script to upload to the board
+
   ```python svl.py [flags] port```
+  
   * ```-b``` **baud rate**: 115200, 921600, or other desired common baud rate (57600, 115200, 230400, 460800, 921600)
   * ```-f``` **filepath**: path to the binary image of your program to upload
   * ```port``` **serial port**: the serial port to connect over (*/dev/\** on \*nix or *COMX* on windows)
