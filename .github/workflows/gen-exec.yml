@@ -82,12 +82,7 @@ jobs:
         run: |
           python --version
           python -m pip install --upgrade pip setuptools wheel
-          # kdb feb 2021 - github env is not latest macOS (16), so svl fails on Big Sur (changes to serial)
-          # To make this work, force the install of a later version of pyserial (3.5)
-          # Can revert back to using the req....txt file once macOS env is upgraded
-          pip install pyinstaller
-          pip install 'pyserial==3.5'
-          #pip install -r svl/requirements.txt
+          pip install -r svl/requirements.txt
 
       - name: build
         run: |
