@@ -151,12 +151,14 @@ jobs:
 
       - name: permit
         run: |
-          chmod +x ./svl/dist/macosx/svl
+          echo "Build disabled until github environment supports Big Sur"                
+#          chmod +x ./svl/dist/macosx/svl
 
       - name: commit
         run: |
-          cd ./svl
-          git add ./dist/macosx/*
-          git commit -m "generated macosx executable"
-          git push
-          cd ${GITHUB_WORKSPACE}
+          echo "Build disabled until github environment supports Big Sur"        
+#          cd ./svl
+#          git add ./dist/macosx/*
+#          git commit -m "generated macosx executable"
+#          git push
+#          cd ${GITHUB_WORKSPACE}
