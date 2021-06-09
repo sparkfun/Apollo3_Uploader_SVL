@@ -352,10 +352,12 @@ def main():
                     c_lflag = 0
                     c_ispeed = port_speed
                     c_ospeed = port_speed
-                    termios.tcsetattr(ser.fd, termios.TCSANOW,
-                                      [c_iflag, c_oflag, c_cflag, c_lflag, c_ispeed, c_ospeed, attrs[6]])
-                    ser.close()
-                    ser.open()
+
+                    new_attrs = [c_iflag, c_oflag, c_cflag, c_lflag, c_ispeed, c_ospeed, attrs[6]]
+                    if attrs != new_attrs:
+                        termios.tcsetattr(ser.fd, termios.TCSANOW, new_attrs)
+                        ser.close()
+                        ser.open()
 
                 # startup time for Artemis bootloader   (experimentally determined - 0.095 sec min delay)
                 t_su = 0.15
