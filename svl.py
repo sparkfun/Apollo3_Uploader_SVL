@@ -355,6 +355,7 @@ def main():
 
                     new_attrs = [c_iflag, c_oflag, c_cflag, c_lflag, c_ispeed, c_ospeed, attrs[6]]
                     if attrs != new_attrs:
+                        verboseprint("Resetting Port config")
                         termios.tcsetattr(ser.fd, termios.TCSANOW, new_attrs)
                         ser.close()
                         ser.open()
