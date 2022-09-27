@@ -16,7 +16,7 @@ Artemis SVL Versions:
 
 * prerequisites
   * board has the SparkFun Variable Loader installed
-    * source code is located in ```bootlaoder/src```
+    * source code is located in ```bootloader/src```
     * precompiled binaries and a makefile are located in ```bootloader/gcc```
       (the artemis module target is suitable for all current SparkFun products)
   * Python is installed on your computer
