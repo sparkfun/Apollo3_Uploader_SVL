@@ -8,6 +8,7 @@ The bootloader for the Artemis can be upgraded via Arduino using [these instruct
 
 Artemis SVL Versions:
 
+* v6 - Fix to write to the upper half of flash
 * v5 - Speed and reliability increases
 * v4 - Added peripheral deinitialization to deliver the Apollo3 closer to the initial reset state.
 * v3 - Initial version
