@@ -37,24 +37,20 @@ jobs:
 
       - name: build
         run: |
-          # echo "Build disabled until github environment supports Big Sur"
          pyinstaller --onefile svl/svl.py          
 
       - name: copy
         run: |
-          # echo "Build disabled until github environment supports Big Sur"
          rm -rf ./svl/dist/macosx          
          mkdir -p ./svl/dist/macosx
          mv ./dist/svl ./svl/dist/macosx/svl
 
       - name: permit
         run: |
-          # echo "Build disabled until github environment supports Big Sur"                
          chmod +x ./svl/dist/macosx/svl
 
       - name: commit
         run: |
-          # echo "Build disabled until github environment supports Big Sur"        
          cd ./svl
          git add ./dist/macosx/*
          git commit -m "generated macosx executable"
