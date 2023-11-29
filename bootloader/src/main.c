@@ -60,7 +60,7 @@ Modified: Juy 22 2019
 // Defines
 //
 //*****************************************************************************
-#define SVL_VERSION_NUMBER 0x05
+#define SVL_VERSION_NUMBER 0x06
 
 // ****************************************
 //
@@ -576,6 +576,7 @@ void enter_bootload(void)
 uint8_t handle_frame_packet(svl_packet_t *packet, uint32_t *p_frame_address, uint16_t *p_last_page_erased)
 {
     // debug_printf("\t\thandling frame\n");
+    static uint16_t last_inst_erased=0; //to keep track of last instance of flash
     uint32_t num_words = (packet->pl_len / 4);
 
     debug_printf("\t\tframe_address = 0x%08X, num_words = %d\n", *(p_frame_address), num_words);
@@ -589,13 +590,15 @@ uint8_t handle_frame_packet(svl_packet_t *packet, uint32_t *p_frame_address, uin
 
     int32_t i32ReturnCode = 0;
     uint32_t offset_address = (*(p_frame_address) + USERCODE_OFFSET);
-    if ((*p_last_page_erased) < AM_HAL_FLASH_ADDR2PAGE(offset_address))
+    //if the last page was less than current page, or we switched into next instance
+    if ((*p_last_page_erased) < AM_HAL_FLASH_ADDR2PAGE(offset_address) || (last_inst_erased < AM_HAL_FLASH_ADDR2INST(offset_address)))
     { // Prevent erasing partially-filled pages
         // debug_printf("Erasing instance %d, page %d\n\r", AM_HAL_FLASH_ADDR2INST( offset_address ), AM_HAL_FLASH_ADDR2PAGE(offset_address) );
 
         //Erase the 8k page for this address
         i32ReturnCode = am_hal_flash_page_erase(AM_HAL_FLASH_PROGRAM_KEY, AM_HAL_FLASH_ADDR2INST(offset_address), AM_HAL_FLASH_ADDR2PAGE(offset_address));
         *(p_last_page_erased) = AM_HAL_FLASH_ADDR2PAGE(offset_address);
+        last_inst_erased=AM_HAL_FLASH_ADDR2INST(offset_address); //keep track of last instance
 
         if (i32ReturnCode)
         {
