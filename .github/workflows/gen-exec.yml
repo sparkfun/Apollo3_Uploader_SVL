@@ -5,12 +5,14 @@ name: generate executables
 
 jobs:
 
-  call-linux-build:
-    uses: ./.github/workflows/build-linux.yml
-
   call-macos-build:
     uses: ./.github/workflows/build-macos.yml
     
   call-windows-build:
+    needs: call-macos-build
     uses: ./.github/workflows/build-windows.yml
+
+  call-linux-build:
+    needs: call-windows-build
+    uses: ./.github/workflows/build-linux.yml
 
