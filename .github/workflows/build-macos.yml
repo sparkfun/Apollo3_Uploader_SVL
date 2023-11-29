@@ -1,0 +1,64 @@
+name: build-macos
+
+on:
+  workflow_call:
+
+
+jobs:
+  
+
+  macosx:
+    name: macosx
+    runs-on: macos-latest
+    steps:
+      - name: repo
+        uses: actions/checkout@v3
+        with:
+          path: svl
+          fetch-depth: 0
+
+      - name: python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.7'
+
+      - name: git
+        run: |
+          git config --global user.email "apollo3-uploader-builder@sparkfun.com"
+          git config --global user.name "apollo3-uploader-builder"
+          git config --global pull.ff only
+          cd svl
+          git pull
+          cd ${GITHUB_WORKSPACE}
+
+      - name: install
+        run: |
+          python --version
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r svl/requirements.txt
+
+      - name: build
+        run: |
+          # echo "Build disabled until github environment supports Big Sur"
+         pyinstaller --onefile svl/svl.py          
+
+      - name: copy
+        run: |
+          # echo "Build disabled until github environment supports Big Sur"
+         rm -rf ./svl/dist/macosx          
+         mkdir -p ./svl/dist/macosx
+         mv ./dist/svl ./svl/dist/macosx/svl
+
+      - name: permit
+        run: |
+          # echo "Build disabled until github environment supports Big Sur"                
+         chmod +x ./svl/dist/macosx/svl
+
+      - name: commit
+        run: |
+          # echo "Build disabled until github environment supports Big Sur"        
+         cd ./svl
+         git add ./dist/macosx/*
+         git commit -m "generated macosx executable"
+         git push
+         cd ${GITHUB_WORKSPACE}
