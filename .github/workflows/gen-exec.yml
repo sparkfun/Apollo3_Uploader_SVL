@@ -4,12 +4,12 @@ on:
 name: generate executables
 
 jobs:
-  # Build the installer on mac
-  call-macos-build:
-    uses: ./.github/workflows/build-macos.yml
-          
+
   call-linux-build:
     uses: ./.github/workflows/build-linux.yml
+
+  call-macos-build:
+    uses: ./.github/workflows/build-macos.yml
     
   call-windows-build:
     uses: ./.github/workflows/build-windows.yml

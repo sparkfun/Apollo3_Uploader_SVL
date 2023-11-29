@@ -1,12 +1,10 @@
+
 name: build-macos
 
 on:
   workflow_call:
 
-
 jobs:
-  
-
   macosx:
     name: macosx
     runs-on: macos-latest
