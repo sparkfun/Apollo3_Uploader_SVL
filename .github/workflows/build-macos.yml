@@ -54,6 +54,5 @@ jobs:
          cd ./svl
          git add ./dist/macosx/*
          git commit -m "generated macosx executable"
-         git pull
          git push
          cd ${GITHUB_WORKSPACE}

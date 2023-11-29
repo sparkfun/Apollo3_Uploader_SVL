@@ -7,7 +7,7 @@ on:
 jobs:
   linux:
     name: linux
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
     steps:
       - name: repo
         uses: actions/checkout@v3
@@ -54,6 +54,5 @@ jobs:
           cd ./svl
           git add ./dist/linux/*
           git commit -m "generated linux executable"
-          git pull
           git push
           cd ${GITHUB_WORKSPACE}
