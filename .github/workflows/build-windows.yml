@@ -52,6 +52,7 @@ jobs:
           cd svl
           git add dist\windows\*
           git commit -m "generated windows executable"
+          git pull
           git push
           cd ${GITHUB_WORKSPACE}
 
