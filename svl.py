@@ -36,11 +36,13 @@
 import argparse
 import serial
 import serial.tools.list_ports as list_ports
+import termios
 import sys
 import time
 import math
 import os.path
 from sys import exit
+import platform as sys_pf
 
 SCRIPT_VERSION_MAJOR = "1"
 SCRIPT_VERSION_MINOR = "7"
@@ -336,9 +338,28 @@ def main():
         bl_success = False
         entered_bootloader = False
 
+        system_type = sys_pf.system().lower()
         for _ in range(num_tries):
 
             with serial.Serial(args.port, args.baud, timeout=args.timeout) as ser:
+                # Set port to known state
+                if args.reset_port:
+                    if system_type == "linux":
+                        attrs = termios.tcgetattr(ser.fd)
+                        c_iflag = 0
+                        c_oflag = 0
+                        port_speed = attrs[4]
+                        c_cflag = termios.CS8 | termios.CREAD | termios.HUPCL | termios.CLOCAL | port_speed
+                        c_lflag = 0
+                        c_ispeed = port_speed
+                        c_ospeed = port_speed
+
+                        new_attrs = [c_iflag, c_oflag, c_cflag, c_lflag, c_ispeed, c_ospeed, attrs[6]]
+                        if attrs != new_attrs:
+                            verboseprint("Resetting Port config")
+                            termios.tcsetattr(ser.fd, termios.TCSANOW, new_attrs)
+                            ser.close()
+                            ser.open()
 
                 # startup time for Artemis bootloader   (experimentally determined - 0.095 sec min delay)
                 t_su = 0.15
@@ -392,6 +413,9 @@ if __name__ == '__main__':
 
     parser.add_argument("-t", "--timeout", default=0.50, help="Communication timeout in seconds (default 0.5)",
                         type=float)
+
+    parser.add_argument("-r", "--reset-port", action="store_true", default=False,
+                        help="Reset the port configuration.")
 
     if len(sys.argv) < 2:
         print("No port selected. Detected Serial Ports:")
